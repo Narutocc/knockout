@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>knockout</title>
+</head>
+<style>
+	.color{
+		color:#ccc;
+	}
+</style>
+<body>
+	<div data-bind="text:name,visible:bool == 2 ? true:false,css:{color:bool},style:{'fontSize':'24px'}"></div>
+	<div data-bind="style:{'fontSize':'24px'}">test</div>
+	<div data-bind="attr:{title:name,class:'color',style:'margin-top:30px'}">test</div>
+	<div data-bind="if:true">if测试</div>
+	<div data-bind="ifnot:false">ifnot测试</div>
+	<div data-bind="html:html"></div>
+	<input type="text" data-bind="value:name,valueUpdate: 'afterkeydown'"><br/>
+	<input type="text" data-bind="textInput:name">
+	<ul data-bind="foreach:people1">
+		<li data-bind="text:$data"></li>
+	</ul>
+	<!-- <ul data-bind="foreach:people2">
+		<li data-bind="text:name"></li>
+	</ul>
+	<ul data-bind="foreach:people2">
+		<li data-bind="text:$data.name"></li>
+	</ul> -->
+
+	<!-- <ul data-bind="foreach:{data:catalogs,as:'catalog'}">
+		<li>
+			<span data-bind="text:catalog.name"></span>
+			<ul data-bind="foreach:{data:items,as:'item'}">
+				<li>
+					<span data-bind="text:item"></span>
+				</li>
+			</ul>
+		</li>
+	</ul> -->
+
+<div data-bind="with:father">
+	<p data-bind="text:data"></p>
+	<p data-bind="text:$root.name"></p>
+	<div data-bind="with:children">
+		<p data-bind="text:data"></p>
+		<p data-bind="text:$parent.name"></p>
+	</div>
+</div>
+<div data-bind="click:clickFun,event:{mousedown:keyDownFun}">click事件</div>
+<input type="text" data-bind="hasFocus:true,">
+
+<select data-bind="options: people2,optionsText: 'name', value: selectedName"></select>
+<button data-bind="click:showSelectedName">显示名称</button>
+<div>
+	<input type="checkbox" name="people" value="zhangsan" data-bind="checked:checkArray">张三
+	<input type="checkbox" name="people" value="lisi" data-bind="checked:checkArray">李四
+	<input type="checkbox" name="people" value="wangwu" data-bind="checked:checkArray">王五
+</div>
+<select data-bind="options: checkArray"></select>
+<button data-bind="click:changeData">数据显示</button>
+<div data-bind="visible:aaaaaaaaaa">3333333333</div>
+<button data-bind="click:clickchange()">确定</button>
+</body>
+<script src="node_modules/knockout/build/output/knockout-latest.js"></script>
+<script>
+	var myViewModel = {
+		name:ko.observable('aaaaaa'),
+		bool:ko.observable(true),
+		bool:2,
+		aaaaaaaaaa:ko.observable(true),
+		clickchange:function(){
+			console.log(111)
+			console.log(this.aaaaaaaaaa);
+			this.aaaaaaaaaa = false
+		},
+		html:'<span style="color:#f00">测试Html</span>',
+		people1:['小明','小红','小张'],   
+		people2:[{name:'小明'},{name:'小红'},{name:'小张'}],
+		selectedName:ko.observable(),
+		showSelectedName:function(){
+			console.log(this.selectedName().name)
+		},
+		catalogs:ko.observable([
+			{
+				name:'水果',
+				items:['apple','banana','orange']
+			},{
+				name:'蔬菜',
+				items:['celery','corn','spinach']
+			}
+		]),
+		father:{
+			data:'第一层',
+			name:'father小明',
+			children:{
+				data:'第二层'
+			}
+		},
+		clickFun:function(){
+			alert('1111111111')
+		},
+		keyDownFun:function(){
+			console.log('222222')
+		},
+		checkArray:ko.observable(['zhangsan','lisi']),
+		changeData:function(){
+			this.checkArray(['zhangsan','lisi','wangwu']);
+			console.log(this.checkArray())
+		}
+	}
+	/*myViewModel.bool(false)
+	myViewModel.bool(true)*/
+	ko.applyBindings(myViewModel);
+</script>
+</html>
